@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+function run() {
+  local domain_name=$(potato_get_arg 1)
+  local datadir=$HOME/.whois/data
+  mkdir -p $datadir
+  cd $datadir
+
+  [ ! -d "./.git" ] && git init && git --allow-empty -m"Empty."
+  git add -A && git commit -m"Adds existing content prior to the update."
+
+  [[ "$domain_name" =~ ^(.*)\.(.+)$ ]] && echo ${BASH_REMATCH[2]}
+  local txt=$(whois $domain_name | tee $datadir/$domain_name)
+  echo "$txt"
+
+  local status=''
+  case ${BASH_REMATCH[2]} in
+    "info"|"org")
+      [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
+      ;;
+    "com"|"net")
+      [ ! -z "$(echo $txt | grep 'No match for domain')" ] && status="AVAILABLE" || status="TAKEN"
+      ;;
+    "*")
+      ;;
+  esac
+  echo $status > $domain_name-STATUS
+      
+  git add -A && git commit -m"Adds $domain_name whois info."
+
+  printf "Recorded '%s' for domain '%s'\n" $status $domain_name
+}
+

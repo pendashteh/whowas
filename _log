@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function run() {
+  local datadir=$HOME/.whois/data
+  mkdir -p $datadir
+  cd $datadir
+  [ ! -d "./.git" ] && git init && git --allow-empty -m"Empty."
+  git log
+}
