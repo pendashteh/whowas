@@ -21,6 +21,15 @@ function run() {
     "com"|"net")
       [ ! -z "$(echo $txt | grep 'No match for domain')" ] && status="AVAILABLE" || status="TAKEN"
       ;;
+    "co")
+      [ ! -z "$(echo $txt | grep 'No Data Found')" ] && status="AVAILABLE" || status="TAKEN"
+      ;;
+    "tech")
+      [ ! -z "$(echo $txt | grep 'DOMAIN NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
+      ;;
+    "ir")
+      [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
+      ;;
     "*")
       ;;
   esac
