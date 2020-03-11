@@ -9,12 +9,19 @@ function run() {
   [ ! -d "./.git" ] && git init && git --allow-empty -m"Empty."
   git add -A && git commit -m"Adds existing content prior to the update."
 
-  [[ "$domain_name" =~ ^(.*)\.(.+)$ ]] && echo ${BASH_REMATCH[2]}
+  local tld=''
+  local status=''
+  local notes=()
+
+  [[ "$domain_name" =~ ^(.*)\.(.+)$ ]] && tld=${BASH_REMATCH[2]}
   local txt=$(whois $domain_name | tee $datadir/$domain_name)
+
+  # Print whois information for the user
   echo "$txt"
 
-  local status=''
-  case ${BASH_REMATCH[2]} in
+  notes+=( "whois performed and tld detected as '$tld'" )
+
+  case $tld in
     "info"|"org")
       [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
       ;;
@@ -30,10 +37,14 @@ function run() {
     "ir")
       [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
       ;;
-    "*")
+    *)
+      [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE"
+      [ ! -z "$(echo $txt | grep 'No match for domain')" ] && status="AVAILABLE"
+      notes+=( "detected STATUS might not be correct." )
       ;;
   esac
   echo $status > $domain_name-STATUS
+  echo $(date +%F) "${notes[@]}" >> $domain_name-NOTES
       
   git add -A && git commit -m"Adds $domain_name whois info."
 
