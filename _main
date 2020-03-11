@@ -38,8 +38,11 @@ function run() {
       [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
       ;;
     *)
-      [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE"
-      [ ! -z "$(echo $txt | grep 'No match for domain')" ] && status="AVAILABLE"
+      [ ! -z "$(echo $txt | grep -i 'NOT FOUND')" ] && status="AVAILABLE"
+      [ ! -z "$(echo $txt | grep -i 'No match for domain')" ] && status="AVAILABLE"
+      [ ! -z "$(echo $txt | grep -i 'No Data Found')" ] && status="AVAILABLE"
+
+      [ ! -z "$(echo $txt | grep -i 'Creation Date')" ] && status="TAKEN"
       notes+=( "detected STATUS might not be correct." )
       ;;
   esac
