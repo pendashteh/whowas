@@ -43,6 +43,9 @@ function run() {
       [ ! -z "$(echo $txt | grep -i 'No Data Found')" ] && status="AVAILABLE"
 
       [ ! -z "$(echo $txt | grep -i 'Creation Date')" ] && status="TAKEN"
+
+      [ ! -z "$(echo $txt | grep -i 'The registration of this domain is restricted')" ] && status="RESTRICTED"
+
       notes+=( "detected STATUS might not be correct." )
       ;;
   esac
