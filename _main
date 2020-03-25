@@ -37,6 +37,9 @@ function run() {
     "ir")
       [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
       ;;
+    "it")
+      [ ! -z "$(echo $txt | grep 'AVAILABLE')" ] && status="AVAILABLE" || status="TAKEN"
+      ;;
     *)
       [ ! -z "$(echo $txt | grep -i 'NOT FOUND')" ] && status="AVAILABLE"
       [ ! -z "$(echo $txt | grep -i 'No match for domain')" ] && status="AVAILABLE"
