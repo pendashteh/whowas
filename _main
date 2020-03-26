@@ -58,6 +58,8 @@ function run() {
         notes+=( "detected STATUS might not be correct." )
         ;;
     esac
+    # Handling exceptions
+    [ ! -z "$(echo $txt | grep 'This premium domain')" ] && status="PREMIUM"
   fi
 
   echo $status > $domain_name-STATUS
