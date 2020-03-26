@@ -2,11 +2,7 @@
 
 function run() {
   local domain_name=$(potato_get_arg 1)
-  local datadir=$HOME/.whois/data
-  mkdir -p $datadir
-  cd $datadir
-
-  [ ! -d "./.git" ] && git init && git --allow-empty -m"Empty."
+  _whowas_ensure_git
   git add -A && git commit -m"Adds existing content prior to the update."
 
   local tld=''
@@ -21,7 +17,7 @@ function run() {
     exit
   fi
 
-  local txt=$(whois $domain_name | tee $datadir/$domain_name)
+  local txt=$(whois $domain_name | tee $(_whowas_git_dir)/$domain_name)
 
   # Print whois information for the user
   echo "$txt"
@@ -72,4 +68,3 @@ function run() {
 
   printf "Recorded '%s' for domain '%s'\n" $status $domain_name
 }
-
