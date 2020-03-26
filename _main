@@ -14,6 +14,13 @@ function run() {
   local notes=()
 
   [[ "$domain_name" =~ ^(.*)\.(.+)$ ]] && tld=${BASH_REMATCH[2]}
+
+  # Sanity check
+  if [ -z "$tld" ]; then
+    echo "[ERROR] un-intended whois lookup? (for $domain_name)"
+    exit
+  fi
+
   local txt=$(whois $domain_name | tee $datadir/$domain_name)
 
   # Print whois information for the user
@@ -21,37 +28,43 @@ function run() {
 
   notes+=( "whois performed and tld detected as '$tld'" )
 
-  case $tld in
-    "info"|"org")
-      [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
-      ;;
-    "com"|"net")
-      [ ! -z "$(echo $txt | grep 'No match for domain')" ] && status="AVAILABLE" || status="TAKEN"
-      ;;
-    "co")
-      [ ! -z "$(echo $txt | grep 'No Data Found')" ] && status="AVAILABLE" || status="TAKEN"
-      ;;
-    "tech")
-      [ ! -z "$(echo $txt | grep 'DOMAIN NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
-      ;;
-    "ir")
-      [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
-      ;;
-    "it")
-      [ ! -z "$(echo $txt | grep 'AVAILABLE')" ] && status="AVAILABLE" || status="TAKEN"
-      ;;
-    *)
-      [ ! -z "$(echo $txt | grep -i 'NOT FOUND')" ] && status="AVAILABLE"
-      [ ! -z "$(echo $txt | grep -i 'No match for domain')" ] && status="AVAILABLE"
-      [ ! -z "$(echo $txt | grep -i 'No Data Found')" ] && status="AVAILABLE"
+  if [ ! -z "$(echo $txt | grep 'No whois server is known')" ]; then
+    status="UNKNOWN"
+    notes+=( "[WARNING] No whois server is known for '$tld'." )
+  else
+    case $tld in
+      "info"|"org")
+        [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
+      "com"|"net")
+        [ ! -z "$(echo $txt | grep 'No match for domain')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
+      "co")
+        [ ! -z "$(echo $txt | grep 'No Data Found')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
+      "tech")
+        [ ! -z "$(echo $txt | grep 'DOMAIN NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
+      "ir")
+        [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
+      "it")
+        [ ! -z "$(echo $txt | grep 'AVAILABLE')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
+      *)
+        [ ! -z "$(echo $txt | grep -i 'NOT FOUND')" ] && status="AVAILABLE"
+        [ ! -z "$(echo $txt | grep -i 'No match for domain')" ] && status="AVAILABLE"
+        [ ! -z "$(echo $txt | grep -i 'No Data Found')" ] && status="AVAILABLE"
 
-      [ ! -z "$(echo $txt | grep -i 'Creation Date')" ] && status="TAKEN"
+        [ ! -z "$(echo $txt | grep -i 'Creation Date')" ] && status="TAKEN"
 
-      [ ! -z "$(echo $txt | grep -i 'The registration of this domain is restricted')" ] && status="RESTRICTED"
+        [ ! -z "$(echo $txt | grep -i 'The registration of this domain is restricted')" ] && status="RESTRICTED"
 
-      notes+=( "detected STATUS might not be correct." )
-      ;;
-  esac
+        notes+=( "detected STATUS might not be correct." )
+        ;;
+    esac
+  fi
+
   echo $status > $domain_name-STATUS
   echo $(date +%F) "${notes[@]}" >> $domain_name-NOTES
       
