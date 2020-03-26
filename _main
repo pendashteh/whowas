@@ -5,11 +5,10 @@ function run() {
   _whowas_ensure_git
   git add -A && git commit -m"Adds existing content prior to the update."
 
-  local tld=''
   local status=''
   local notes=()
 
-  [[ "$domain_name" =~ ^(.*)\.(.+)$ ]] && tld=${BASH_REMATCH[2]}
+  local tld=$(_whowas_extract_tld $domain_name)
 
   # Sanity check
   if [ -z "$tld" ]; then
