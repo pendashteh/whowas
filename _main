@@ -5,7 +5,7 @@ function run() {
   _whowas_ensure_git
   git add -A && git commit -m"Adds existing content prior to the update."
 
-  local status=''
+  local status='UNKNOWN'
   local notes=()
 
   local tld=$(_whowas_extract_tld $domain_name)
