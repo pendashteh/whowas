@@ -67,7 +67,7 @@ function run() {
   echo $status > $domain_name-STATUS
   echo $(date +%F) "${notes[@]}" >> $domain_name-NOTES
       
-  git add -A && git commit -m"Adds $domain_name whois info."
+  git add -A && git commit -m"Adds '$domain_name' whois info. (detected as '$status')"
 
   printf "Recorded '%s' for domain '%s'\n" $status $domain_name
 }
