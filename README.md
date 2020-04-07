@@ -1,9 +1,14 @@
 # whowas
 Who was the domain name you checked a while ago or a better whois!
 
+# Usage
+```
+$ whowas domain_name [notes]
+```
+
 # Usecase
 ```
-$ whowas myclinetsbusiness.com
+$ whowas myclinetsbusiness.com 'a nice alternative domain name'
 ...
 
 Recorded 'TAKEN' for domain 'myclinetsbusiness.com'
