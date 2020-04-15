@@ -64,6 +64,8 @@ function run() {
     esac
     # Handling exceptions
     [ ! -z "$(echo $txt | grep 'This premium domain')" ] && status="PREMIUM"
+    [ ! -z "$(echo $txt | grep 'This platinum domain is available')" ] && status="PREMIUM"
+
   fi
 
   local git_commit_message=()
