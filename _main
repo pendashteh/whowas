@@ -84,4 +84,12 @@ function run() {
   git add -A && git commit -m "${commit_message}"
 
   printf "Recorded '%s' for domain '%s'\n" $status $domain_name
+
+  case $status in
+    "TAKEN")
+      echo "Related dates:"
+      echo "$txt" | grep -i 'date'
+    ;;
+  esac
+
 }
