@@ -48,6 +48,9 @@ function run() {
       "it")
         [ ! -z "$(echo $txt | grep 'AVAILABLE')" ] && status="AVAILABLE" || status="TAKEN"
         ;;
+      "au")
+        [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
+        ;;
       *)
         # from .fast ltd
         [ ! -z "$(echo $txt | grep -i 'This domain name has not been registered.')" ] && status="AVAILABLE"
