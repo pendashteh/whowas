@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+function run() {
+  local tld=$1
+
+  _whowas_ensure_git
+
+  local status='UNKNOWN'
+
+  local txt=$(whois -h whois.iana.org $tld | tee $tld)
+
+  local host=$(echo "$txt" | grep 'whois:' | awk '{print $2}')
+  echo $host > $tld-HOST
+  local commit_message="Adds whois server for '$tld' as '$host'"
+  git add -A && git commit -m "${commit_message}"
+
+  printf $commit_message
+
+}

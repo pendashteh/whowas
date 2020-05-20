@@ -12,13 +12,19 @@ function run() {
 
   local tld=$(_whowas_extract_tld $domain_name)
 
+  local hostfile=${tld}-HOST
+  [ ! -e $hostfile ] && potato_run_task host $tld
+  local host=$(cat $hostfile)
+
+  [ -z "$host" ] && echo '[ERROR] could not find the whois server for '$tld && exit 1
+
   # Sanity check
   if [ -z "$tld" ]; then
     echo "[ERROR] un-intended whois lookup? (for $domain_name)"
     exit
   fi
 
-  local txt=$(whois $domain_name | tee $(_whowas_git_dir)/$domain_name)
+  local txt=$(whois -h $host $domain_name | tee $(_whowas_git_dir)/$domain_name)
 
   # Print whois information for the user
   echo "$txt"
