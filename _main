@@ -74,14 +74,18 @@ function run() {
     # Handling exceptions
     [ ! -z "$(echo $txt | grep 'This premium domain')" ] && status="PREMIUM"
     [ ! -z "$(echo $txt | grep 'This platinum domain is available')" ] && status="PREMIUM"
-    # from .cleaning ltd
-    [ ! -z "$(echo $txt | grep -i 'This name is reserved')" ] && status="RESERVED"
 
     # final try if there is no status detected so far.
     if [ "$status" = "UNKNOWN" ]; then
       if [ ! -z "$(echo $txt | grep -i 'domain:\s*'${tld})" ]; then
         # private TLDs owned by one organisation. e.g. .OFFICE by Microsoft
         status="PRIVATE"
+      elif [ ! -z "$(echo $txt | grep -i 'this name is reserved')" ]; then
+        # Reserved domain name example from .cleaning tld
+        status="RESERVED"
+      elif [ ! -z "$(echo $txt | grep -i 'Reserved Domain Name')" ]; then
+        # Reserved domain name example from .review tld
+        status="RESERVED"
       elif [ ! -z "$(echo $txt | grep -i 'status:.*active')" ]; then
         status="TAKEN"
       fi
