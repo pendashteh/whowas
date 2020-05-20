@@ -93,14 +93,14 @@ function run() {
   fi
 
   local git_commit_message=()
-  git_commit_message+=( "Adds '$domain_name' whois info." )
+  git_commit_message+=( "Whois lookup for '$domain_name'." )
   if [ ! -z "$status" ]; then
     git_commit_message+=( " Detected as '$status'." )
   fi
   if [ ! -z "$user_comment" ]; then
+    git_commit_message+=( " Commented as '$user_comment'." )
     notes+=( " Users comment: '$user_comment'." )
   fi
-
 
   echo $status > $domain_name-STATUS
   echo $(date +%F) "${notes[@]}" >> $domain_name-NOTES
