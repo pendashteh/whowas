@@ -24,7 +24,8 @@ function run() {
     exit
   fi
 
-  local txt=$(whois -h $host $domain_name | tee $(_whowas_git_dir)/$domain_name)
+  local cmd_whois="whois -h $host $domain_name"
+  local txt=$($cmd_whois | tee $domain_name)
 
   # Print whois information for the user
   echo "$txt"
@@ -107,12 +108,18 @@ function run() {
   local commit_message="${git_commit_message[@]}"
   git add -A && git commit -m "${commit_message}"
 
-  printf "Recorded '%s' for domain '%s'\n" $status $domain_name
+  echo ''
+  echo '## Query for '$domain_name
+  echo '$ '$cmd_whois
+  echo ''
+  test "$status" && echo '; Detected as '$status
+  test "$user_comment" && echo '; Commented as '$user_comment
+  echo ''
 
   case $status in
-    "TAKEN")
-      echo "Related dates:"
-      echo "$txt" | grep -i 'date'
+    'TAKEN')
+      echo '; Important dates:'
+      echo "$txt" | grep -i 'Updated\|Creat\|Expir'
     ;;
   esac
 
