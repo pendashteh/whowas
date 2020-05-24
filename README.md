@@ -3,7 +3,17 @@ Who was the domain name you checked a while ago or a better whois!
 
 # Usage
 ```
-$ whowas domain_name [notes]
+# whois data for DOMAIN with optional NOTES
+$ whowas DOMAIN [NOTES]
+
+# list of available TLDs
+$ whowas tlds
+
+# whoise server for a TLD
+$ whowas fun
+
+# Interact with the git repository for recorded whois data
+$ whowas git [GIT-COMMAND]
 ```
 
 # Usecase
