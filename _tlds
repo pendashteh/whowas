@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+function run() {
+  _whowas_ensure_git
+
+  local tlds_url='https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+  local tlds_md5_url='https://data.iana.org/TLD/tlds-alpha-by-domain.txt.md5'
+
+  echo '; Fetching '$tlds_url
+  curl --silent $tlds_url | tee $(basename $tlds_url)
+  echo ''
+
+  echo '; Fetching '$tlds_md5_url
+  curl --silent $tlds_md5_url | tee $(basename $tlds_md5_url)
+  echo ''
+
+  git add -A && git commit -m 'Updates TLDs list.'
+}
