@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-function run {
-  potato_tasks_list
+function run() {
+  echo 'Available commands:'
+  printf -- '- %s \n' $(potato_tasks_list)
 }
