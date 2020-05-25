@@ -91,8 +91,10 @@ function run() {
       elif [ ! -z "$(echo $txt | grep -i 'Reserved Domain Name')" ]; then
         # Reserved domain name example from .review tld
         status="RESERVED"
-      elif [ ! -z "$(echo $txt | grep -i 'status:.*active')" ]; then
-        status="TAKEN"
+      elif [ ! -z "$(echo $txt | grep -i 'is available for registration')" ]; then
+        # Domain {{domain}} is available for registration
+        # from .photo tld
+        status="AVAILABLE"
       fi
     fi
   fi
