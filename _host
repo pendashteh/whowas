@@ -8,7 +8,7 @@ function run() {
   local status='UNKNOWN'
 
   local txt=$(whois -h whois.iana.org $tld | tee $tld)
-
+  echo "$txt"
   local host=$(echo "$txt" | grep 'whois:' | awk '{print $2}')
   echo $host > $tld-HOST
   local commit_message="Adds whois server for '$tld' as '$host'"
