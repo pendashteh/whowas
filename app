@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-[ -f "$POTATO_CORE" ] && . $POTATO_CORE
+set -e
 
-[ ! -f "$POTATO_CORE" ] && echo "Please get potato first..." && exit
+test -e $POTATO_CORE && . $POTATO_CORE --exec || echo 'Go get potato first.'
 
-potato_load_app
-
-source 'in'
-
-potato_exec "${@}"

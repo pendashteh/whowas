@@ -2,5 +2,5 @@
 
 function run() {
   _whowas_ensure_git
-  git $(potato_get_args)
+  git "$@"
 }
