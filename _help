@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 function run() {
+  echo "$@"
   echo 'Available commands:'
   printf -- '- %s \n' $(potato_tasks_list)
 }

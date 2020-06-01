@@ -6,6 +6,6 @@
 
 potato_load_app
 
-potato_include 'inc'
+source 'in'
 
 potato_exec "${@}"
