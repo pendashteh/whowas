@@ -55,8 +55,8 @@ function run() {
       "tech")
         [ ! -z "$(echo $txt | grep 'DOMAIN NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
         ;;
-      "ir")
-        [ ! -z "$(echo $txt | grep 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
+      ir|is)
+        [ ! -z "$(echo $txt | grep -i 'no entries found')" ] && status="AVAILABLE" || status="TAKEN"
         ;;
       "it")
         [ ! -z "$(echo $txt | grep 'AVAILABLE')" ] && status="AVAILABLE" || status="TAKEN"
