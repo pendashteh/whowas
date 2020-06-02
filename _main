@@ -125,7 +125,7 @@ function run() {
   echo ''
 
   case $status in
-    'TAKEN')
+    AVAILABLE) ;; *)
       echo '; Important dates:'
       echo "$txt" | grep -i 'Updated\|Creat\|Expir'
     ;;
