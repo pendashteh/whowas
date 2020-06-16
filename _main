@@ -65,7 +65,7 @@ function run() {
         [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
         ;;
       *)
-        # from .fast ltd
+        # from .fast tld
         [ ! -z "$(echo $txt | grep -i 'This domain name has not been registered.')" ] && status="AVAILABLE"
         [ ! -z "$(echo $txt | grep -i 'NOT FOUND')" ] && status="AVAILABLE"
         [ ! -z "$(echo $txt | grep -i 'No match for domain')" ] && status="AVAILABLE"
@@ -74,6 +74,10 @@ function run() {
         [ ! -z "$(echo $txt | grep -i 'Creation Date')" ] && status="TAKEN"
 
         [ ! -z "$(echo $txt | grep -i 'The registration of this domain is restricted')" ] && status="RESTRICTED"
+
+        # from .fun tld
+        [ ! -z "$(echo $txt | grep -i 'not available for registration')" ] && status="TAKEN"
+        [ ! -z "$(echo $txt | grep -i 'has been reserved')" ] && status="RESERVED"
 
         notes+=( "detected STATUS might not be correct." )
         ;;
