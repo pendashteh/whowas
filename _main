@@ -46,7 +46,7 @@ function run() {
       "info"|"org")
         [ ! -z "$(echo $txt | grep 'NOT FOUND')" ] && status="AVAILABLE" || status="TAKEN"
         ;;
-      "com"|"net")
+      "com"|"net"|"tv")
         [ ! -z "$(echo $txt | grep -i 'no match for')" ] && status="AVAILABLE" || status="TAKEN"
         ;;
       "co")
