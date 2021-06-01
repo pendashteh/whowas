@@ -31,7 +31,7 @@ function run() {
   fi
 
   local cmd_whois="whois -h $host $domain_name"
-  local txt=$($cmd_whois | tee $domain_name)
+  local txt=$($cmd_whois 2>&1 | tee $domain_name)
 
   # Print whois information for the user
   echo "$txt"
@@ -41,6 +41,9 @@ function run() {
   if [ ! -z "$(echo $txt | grep 'No whois server is known')" ]; then
     status="UNKNOWN"
     notes+=( "[WARNING] No whois server is known for '$tld'." )
+  elif [ ! -z "$(echo $txt | grep 'Name or service not known')" ]; then
+    status="FAILED"
+    notes+=( "[ERROR] Performing the whois query failed. No log is registered. '$tld'." )
   else
     case $tld in
       "info"|"org")
@@ -134,6 +137,9 @@ function run() {
   echo ''
 
   case $status in
+    FAILED)
+      echo "${notes[@]}"
+      ;;
     AVAILABLE) ;; *)
       echo '; Important dates:'
       echo "$txt" | grep -i 'Updated\|Creat\|Expir'
